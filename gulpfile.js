@@ -169,7 +169,7 @@ function cssBuild() {
 		)
 		.pipe(
 		  autoprefixer({ 
-			overrideBrowserslist: ['last 5 versions'],
+			overrideBrowserslist: ['last 10 versions'],
 			cascade: true,
 			grid: true
 		}))
