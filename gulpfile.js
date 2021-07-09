@@ -15,10 +15,10 @@ let path = {
 	src: {
 		html:   [source_folder + '/*.html', '!' + source_folder + '/_*.html',],
 		css:    source_folder  + '/scss/*.scss',
-		js:     source_folder  + '/js/*.js',
+		js: 	  [source_folder + '/js/script.js', source_folder + '/js/vendors.js'],
 		img:    source_folder  + '/img/**/*.{jpg,png,gif,ico,webp}',
 		svg: 	  source_folder  + '/img/**/*.svg',
-		fonts:  source_folder  + '/fonts/*.{woff,woff2}',
+		fonts:  source_folder  + '/fonts/*.*',
 		json:   source_folder  + '/json/*.*',
 	},
 	watch: {
@@ -46,6 +46,9 @@ const uglify        = require('gulp-uglify-es').default;
 const imagemin      = require('gulp-imagemin');
 const newer  		  = require('gulp-newer');
 const notify 		  = require("gulp-notify");
+const plumber 		  = require("gulp-plumber");
+const ttf2woff 	  = require('gulp-ttf2woff');
+const ttf2woff2     = require('gulp-ttf2woff2');
 
 function browserSync(params) {
 	browsersync.init({
@@ -59,20 +62,21 @@ function browserSync(params) {
 }
 
 function json() {
-	return src(path.src.json)
+	return src(path.src.json, {})
 		.pipe(dest(path.build.json))
 		.pipe(browsersync.stream())
 }
 
 function html() {
-	return src(path.src.html)
+	return src(path.src.html, {})
+		.pipe(plumber())
 		.pipe(fileinclude())
 		.pipe(dest(path.build.html))
 		.pipe(browsersync.stream())
 }
 
 function css() {
-	return src(path.src.css)
+	return src(path.src.css, {})
 		//src(['css/*.css',  '!css/file.css']) Исключить определенный файл с обработки 
 		.pipe(
 		  scss({
@@ -84,7 +88,8 @@ function css() {
 }
 
 function js() {
-	return src(path.src.js)
+	return src(path.src.js, {})
+		.pipe(plumber())
 		.pipe(fileinclude())
 		.pipe(dest(path.build.js))
 		.pipe(browsersync.stream())
@@ -104,7 +109,6 @@ function images() {
 
 function fonts() {
 	return src(path.src.fonts)
-		.pipe(newer(path.build.fonts))
 		.pipe(dest(path.build.fonts))
 }
 
@@ -122,9 +126,9 @@ function fontsStyle(done) {
 					fs.appendFile(source_folder + '/scss/blocks/fonts.scss', '@include font("' + fontname + '", "' + fontname + '", "400", "normal");\r\n', cb);
 				 }
 				c_fontname = fontname;
-				done();
 			}
-		 }
+		}
+		done();
 	 })
 	}
 	done();
