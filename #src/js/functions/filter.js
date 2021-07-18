@@ -1,27 +1,25 @@
-function testFilter() {
-	const buttons = document.querySelectorAll('.gallery__btn');
-	const items   = document.querySelectorAll('.gallery__item');
+const newFilter = () => {
+	const allBtns  = document.querySelector('.catalog__btns');
+	const allItems = document.querySelectorAll('.catalog__item');
 
-	function filter(currentCategory, cards) {
-		const isShowAll = currentCategory === 'all';
-		cards.forEach(function(card) {
-			const category  = card.dataset.set;
-			if (currentCategory != category && isShowAll == false) {
-				card.classList.add('_hide')
-			} else {
-				card.classList.remove('_hide')
+	allBtns.addEventListener('click', (e) => {
+		let target = e.target;
+		if (target.classList.contains('catalog__country-btn')) {
+			document.querySelector('.catalog__country-btn._active').classList.remove('_active');
+			target.classList.add('_active');
+			let btnAttr = target.getAttribute('data-filter');
+			for (let item of allItems) {
+				let itemAttr = item.getAttribute('data-country');
+				if (btnAttr !== itemAttr && btnAttr !== 'all') {
+					item.classList.add('_hide');
+				} else {
+					item.classList.remove('_anime');
+					item.classList.remove('_hide');
+				}
 			}
-		});
-	};
-
-	buttons.forEach(function(btn) {
-		btn.addEventListener('click', function(clickBtn) {
-			document.querySelector('.gallery__btn._active').classList.remove('_active');
-			btn.classList.add('_active');
-			const currentCategory = btn.dataset.filter;
-			filter(currentCategory, items);
-		});
+		}
 	});
-}
 
-testFilter();
+};
+
+newFilter();

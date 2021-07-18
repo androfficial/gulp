@@ -13,13 +13,14 @@ let path = {
 		json:   project_folder + '/json/',
 	},
 	src: {
-		html:   [source_folder + '/*.html', '!' + source_folder + '/_*.html',],
-		css:    source_folder  + '/scss/*.scss',
-		js: 	  [source_folder + '/js/script.js', source_folder + '/js/vendors.js'],
-		img:    source_folder  + '/img/**/*.{jpg,png,gif,ico,webp}',
-		svg: 	  source_folder  + '/img/**/*.svg',
-		fonts:  source_folder  + '/fonts/*.*',
-		json:   source_folder  + '/json/*.*',
+		favicon: source_folder  + "/img/favicon.{jpg,png,svg,gif,ico,webp}",
+		html:    [source_folder + '/*.html', '!' + source_folder + '/_*.html',],
+		css:     source_folder  + '/scss/*.scss',
+		js: 	   [source_folder + '/js/script.js', source_folder + '/js/vendors.js'],
+		img:     source_folder  + '/img/**/*.{jpg,png,gif,ico,webp}',
+		svg: 	   source_folder  + '/img/**/*.svg',
+		fonts:   source_folder  + '/fonts/*.*',
+		json:    source_folder  + '/json/*.*',
 	},
 	watch: {
 		html:   source_folder  + '/**/*.html',
@@ -37,7 +38,7 @@ const {src, dest, parallel, series, watch}  = require('gulp');
 const browsersync   = require('browser-sync').create();
 const fileinclude   = require('gulp-file-include');
 const del 		     = require('del');
-const scss 		 	  = require('gulp-sass');
+const scss 		     = require('gulp-sass')(require('sass'));
 const autoprefixer  = require('gulp-autoprefixer');
 const group_media   = require('gulp-group-css-media-queries');
 const clean_css     = require('gulp-clean-css');
@@ -47,8 +48,6 @@ const imagemin      = require('gulp-imagemin');
 const newer  		  = require('gulp-newer');
 const notify 		  = require("gulp-notify");
 const plumber 		  = require("gulp-plumber");
-const ttf2woff 	  = require('gulp-ttf2woff');
-const ttf2woff2     = require('gulp-ttf2woff2');
 
 function browserSync(params) {
 	browsersync.init({
@@ -79,8 +78,8 @@ function css() {
 	return src(path.src.css, {})
 		//src(['css/*.css',  '!css/file.css']) Исключить определенный файл с обработки 
 		.pipe(
-		  scss({
-			outputStyle: 'expanded'
+		  scss.sync({
+			outputStyle: 'expanded',
 		  }).on('error', notify.onError())
 		)
 		.pipe(dest(path.build.css))
@@ -98,6 +97,17 @@ function js() {
 function svgCopy() {
 	return src(path.src.svg)
 		.pipe(dest(path.build.img))
+}
+
+function favicon() {
+	return src(path.src.favicon)
+		.pipe(plumber())
+		.pipe(
+			rename({
+				extname: ".ico"
+			})
+		)
+		.pipe(dest(path.build.html))
 }
 
 function images() {
@@ -160,7 +170,8 @@ exports.js         	 = js;
 exports.css        	 = css;
 exports.html      	 = html;
 exports.json      	 = json;
-exports.default   	 = series(clean, parallel(js, html, json, svgCopy, images, fonts), fontsStyle, css, parallel(browserSync, watchFiles));
+exports.favicon 		 = favicon;
+exports.default   	 = series(clean, parallel(js, html, json, svgCopy, favicon, images, fonts), fontsStyle, css, parallel(browserSync, watchFiles));
 
 function cssBuild() {
 	return src(path.src.css)
@@ -216,4 +227,4 @@ function optimazedImgBuild() {
 		.pipe(dest(path.build.img))
 }
 
-exports.build = series(clean, parallel(jsBuild, html, json, svgCopy, fonts), fontsStyle, cssBuild, optimazedImgBuild);
+exports.build = series(clean, parallel(jsBuild, html, json, favicon, svgCopy, fonts), fontsStyle, cssBuild, optimazedImgBuild);
