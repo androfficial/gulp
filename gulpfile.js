@@ -45,9 +45,9 @@ const clean_css     = require('gulp-clean-css');
 const rename        = require('gulp-rename');
 const uglify        = require('gulp-uglify-es').default;
 const imagemin      = require('gulp-imagemin');
-const newer  		  = require('gulp-newer');
-const notify 		  = require("gulp-notify");
-const plumber 		  = require("gulp-plumber");
+const newer  	    = require('gulp-newer');
+const notify 	    = require("gulp-notify");
+const plumber 	    = require("gulp-plumber");
 
 function browserSync(params) {
 	browsersync.init({
@@ -56,7 +56,7 @@ function browserSync(params) {
 		},
 		port: 3000,
 		notify: false,
-		online: true
+		online: true,
 	})
 }
 
@@ -144,7 +144,7 @@ function fontsStyle(done) {
 	done();
  }
 
-function cb() { //функция нужна для корректной работы функции fontsStyle
+function cb() { // Функция нужна для корректной работы функции fontsStyle
 
 }
 
@@ -164,20 +164,20 @@ function clean(params) {
 exports.fontsStyle    = fontsStyle;
 exports.watchFiles    = watchFiles;
 exports.svgCopy       = svgCopy;
-exports.fonts      	 = fonts;
+exports.fonts         = fonts;
 exports.images        = images;
-exports.js         	 = js;
-exports.css        	 = css;
-exports.html      	 = html;
-exports.json      	 = json;
-exports.favicon 		 = favicon;
-exports.default   	 = series(clean, parallel(js, html, json, svgCopy, favicon, images, fonts), fontsStyle, css, parallel(browserSync, watchFiles));
+exports.js            = js;
+exports.css           = css;
+exports.html          = html;
+exports.json          = json;
+exports.favicon       = favicon;
+exports.default       = series(clean, parallel(js, html, json, svgCopy, favicon, images, fonts), fontsStyle, css, parallel(browserSync, watchFiles));
 
 function cssBuild() {
 	return src(path.src.css)
 		.pipe(
 		  scss({
-			outputStyle: 'expanded'
+			outputStyle: 'expanded',
 		}))
 		.pipe(
 		  group_media()
@@ -186,7 +186,7 @@ function cssBuild() {
 		  autoprefixer({ 
 			overrideBrowserslist: ['last 10 versions'],
 			cascade: true,
-			grid: true
+			grid: true,
 		}))
 		.pipe(dest(path.build.css))
 		.pipe(
