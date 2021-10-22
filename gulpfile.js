@@ -16,9 +16,9 @@ let path = {
 		favicon: source_folder  + "/img/favicon.{jpg,png,svg,gif,ico,webp}",
 		html:    [source_folder + '/*.html', '!' + source_folder + '/_*.html',],
 		css:     source_folder  + '/scss/*.scss',
-		js: 	   [source_folder + '/js/script.js', source_folder + '/js/vendors.js'],
+		js: 	 [source_folder + '/js/script.js', source_folder + '/js/vendors.js'],
 		img:     source_folder  + '/img/**/*.{jpg,png,gif,ico,webp}',
-		svg: 	   source_folder  + '/img/**/*.svg',
+		svg: 	 source_folder  + '/img/**/*.svg',
 		fonts:   source_folder  + '/fonts/*.*',
 		json:    source_folder  + '/json/*.*',
 	},
@@ -37,8 +37,8 @@ const {src, dest, parallel, series, watch}  = require('gulp');
 
 const browsersync   = require('browser-sync').create();
 const fileinclude   = require('gulp-file-include');
-const del 		     = require('del');
-const scss 		     = require('gulp-sass')(require('sass'));
+const del 	    = require('del');
+const scss          = require('gulp-sass')(require('sass'));
 const autoprefixer  = require('gulp-autoprefixer');
 const group_media   = require('gulp-group-css-media-queries');
 const clean_css     = require('gulp-clean-css');
