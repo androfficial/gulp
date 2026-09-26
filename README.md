@@ -23,8 +23,8 @@ Gulp 4 build setup for static sites. It assembles HTML from partials, compiles S
 You need Node.js 16 or 18 and npm.
 
 ```bash
-git clone https://github.com/androfficial/gulp-starter.git
-cd gulp-starter
+git clone https://github.com/androfficial/html-gulp-starter.git
+cd html-gulp-starter
 npm install
 npm run dev
 ```
