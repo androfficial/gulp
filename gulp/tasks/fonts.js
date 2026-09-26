@@ -97,7 +97,7 @@ export const fontsStyle = () => {
         }
       } else {
         console.log(
-          "Файл scss/fonts.scss уже существует. Для обновления файла нужно его удалить!"
+          "The scss/fonts.scss file already exists. Delete it to update the file!"
         );
       }
     }
